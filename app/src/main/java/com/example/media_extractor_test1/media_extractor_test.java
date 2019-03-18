@@ -16,7 +16,7 @@ public class media_extractor_test
     private int mAudioChannels;
     private int mAudioSampleRate;
     private int mAudioBitRate;
-    private int mAudioDurationUs;
+    private long mAudioDurationUs;
     private String mAudioKeyMine;
 
     MediaCodec decoder;
@@ -55,7 +55,7 @@ public class media_extractor_test
             mAudioSampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
 
             ////// need ittttt
-            mAudioDurationUs = format.getInteger(MediaFormat.KEY_DURATION);
+            mAudioDurationUs = format.getLong(MediaFormat.KEY_DURATION);
 
             //mAudioBitRate = format.getInteger(MediaFormat.KEY_BIT_RATE);
 
