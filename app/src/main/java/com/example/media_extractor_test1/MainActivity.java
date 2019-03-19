@@ -1,24 +1,17 @@
 package com.example.media_extractor_test1;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.media.AudioFormat;
-import android.media.AudioTrack;
 import android.media.MediaExtractor;
-import android.media.MediaFormat;
-import android.os.Environment;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -30,7 +23,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LinearLayout Ll = (LinearLayout) findViewById(R.id.Ll);
+        LinearLayout Ll = findViewById(R.id.Ll);
 
         TextView t = new TextView(this);
         t.setText("boot ok");
@@ -53,7 +46,7 @@ public class MainActivity extends AppCompatActivity
 
     public void ask_permission()
     {
-        LinearLayout Ll = (LinearLayout) findViewById(R.id.Ll);
+        LinearLayout Ll = findViewById(R.id.Ll);
 
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) &&
@@ -84,9 +77,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
-        LinearLayout Ll = (LinearLayout) findViewById(R.id.Ll);
+        LinearLayout Ll = findViewById(R.id.Ll);
 
         TextView t = new TextView(this);
         t.setText("handler ok");
