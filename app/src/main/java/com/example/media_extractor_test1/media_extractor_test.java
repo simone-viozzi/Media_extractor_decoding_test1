@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class media_extractor_test
 {
@@ -54,10 +56,11 @@ public class media_extractor_test
             mAudioChannels = format.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
             mAudioSampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
 
-            ////// need ittttt
             mAudioDurationUs = format.getLong(MediaFormat.KEY_DURATION);
 
             //mAudioBitRate = format.getInteger(MediaFormat.KEY_BIT_RATE);
+
+            Log.v(TAG, "mAudioDurationUs -> " + mAudioDurationUs);
 
             setDecoder(format);
 
@@ -92,6 +95,8 @@ public class media_extractor_test
         return false;
     }
 
+
+
     public void getData(MediaExtractor extractor)
     {
         Log.v(TAG, "buffer allocated");
@@ -108,19 +113,17 @@ public class media_extractor_test
 
         decoder.start();
 
-        //int index = decoder.dequeueInputBuffer(1000);
-
-        //// il metodo non funziona TODO
         boolean EOS = false;
-        long lastPresentationTimeUs = -1;
 
         // extractor.readSampleData -> Retrieve the current encoded sampleSize
         // and store it in the byte buffer starting at the given offset.
 
         // devo ciclare fino a !eosReceived
         //while (sampleSize >= 0)
-        while (!EOS) // TODO
+        while (!EOS)
         {
+
+            long presentationTimeUs = 0;
 
             // pijo l'indice
             int inIndex = decoder.dequeueInputBuffer(1000);
@@ -134,21 +137,21 @@ public class media_extractor_test
                 sampleSize = extractor.readSampleData(inputBuffer, 0);
                 // ho estratto sampleSize dati
 
-                long presentationTimeUs = 0;
-
                 // se sampleSize < 0 ho raggiunto la fine del file
                 if (sampleSize < 0)
                 {
                     Log.v(TAG, "presentationTimeUs: " + extractor.getSampleTime());
                     Log.d(TAG, "InputBuffer BUFFER_FLAG_END_OF_STREAM");
-                    decoder.queueInputBuffer(inIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
 
+                    presentationTimeUs = extractor.getSampleTime();
+
+                    decoder.queueInputBuffer(inIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
                 }
                 else
                 {
                     Log.v(TAG, "presentationTimeUs: " + extractor.getSampleTime());
 
-                    lastPresentationTimeUs = extractor.getSampleTime();
+                    //extractor.getSampleTime();
 
                     decoder.queueInputBuffer(inIndex, 0, sampleSize, extractor.getSampleTime(), 0);
                     extractor.advance();
@@ -166,7 +169,7 @@ public class media_extractor_test
 
             MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
 
-            int outputBufferId = decoder.dequeueOutputBuffer(info, 10000);
+            int outputBufferId = decoder.dequeueOutputBuffer(info, 3000);
 
             Log.v(TAG, "info: info.flags -> " + info.flags +
                     ", info.offset -> " + info.offset +
@@ -175,11 +178,13 @@ public class media_extractor_test
 
             boolean flag = false; // TODO
 
-            if (lastPresentationTimeUs == info.presentationTimeUs)
+            if ((info.presentationTimeUs == 0) && (presentationTimeUs == -1))
             {
                 Log.v(TAG, "lastPresentationTimeUs = info.presentationTimeUs");
-                flag = true;
+                EOS = true;
             }
+
+            //long duration
 
 
             if (outputBufferId >= 0)
@@ -196,23 +201,25 @@ public class media_extractor_test
                                         outputBufferId))));
 
 
-
                 if (outputBuffer != null)
                 {
                     int cont = 0;
+                    List<Byte> dati = new ArrayList<Byte>();
                     while (outputBuffer.hasRemaining())
                     {
                         int pos = outputBuffer.position();
                         byte data = outputBuffer.get();
 
+                        dati.add(data);
 
-                        if (cont < 3)
-                        {
-                            //Log.v(TAG, "data -> " + data);
-                        }
                         cont++;
                     }
-                    Log.v(TAG, "cont -> " + cont + " <-----");
+
+                    if (print < 10)
+                    {
+                        Log.v(TAG, "cont -> " + cont + " -> data -> " + dati.toString());
+                    }
+                    print++;
                 }
                 else
                 {
@@ -238,11 +245,6 @@ public class media_extractor_test
                 Log.v(TAG, "-------------------------------- ne A ne B \n outputBufferId: " + (outputBufferId==MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED ? "INFO_OUTPUT_BUFFERS_CHANGED" : (
                         outputBufferId==MediaCodec.INFO_OUTPUT_FORMAT_CHANGED ? "INFO_OUTPUT_FORMAT_CHANGED" : (
                                 outputBufferId==MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId))));
-            }
-
-            if (flag) // TODO
-            {
-                EOS = true;
             }
 
         }
