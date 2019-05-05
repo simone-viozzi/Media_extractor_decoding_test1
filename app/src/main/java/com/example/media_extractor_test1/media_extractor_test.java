@@ -11,9 +11,9 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class media_extractor_test
+class media_extractor_test
 {
-    protected final String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     //private long mAudioDurationUs;
     private String mAudioKeyMine;
@@ -26,7 +26,7 @@ public class media_extractor_test
     }
 
 
-    public MediaExtractor getHeader()
+    MediaExtractor getHeader()
     {
         Log.v(TAG, "media_exctractor_test called");
 
@@ -96,7 +96,7 @@ public class media_extractor_test
 
 
 
-    public void getData(MediaExtractor extractor)
+    void getData(MediaExtractor extractor)
     {
         Log.v(TAG, "buffer allocated");
 
