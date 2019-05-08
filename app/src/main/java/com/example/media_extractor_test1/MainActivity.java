@@ -14,6 +14,7 @@ import android.widget.Button;
 
 import com.example.AudioHandler.AudioPlayer;
 import com.example.AudioHandler.AudioRecorder;
+import com.example.ConsumerProducer.Setup;
 
 import java.io.IOException;
 
@@ -52,6 +53,26 @@ public class MainActivity extends AppCompatActivity
         Button stopPlayer = findViewById(R.id.playerStop);
         stopPlayer.setOnClickListener(new stopPlayerClick(p));
 
+
+        Button startConsProd = findViewById(R.id.ProdCons_btn);
+        startConsProd.setOnClickListener(new startConsProdClick());
+
+    }
+
+
+    class startConsProdClick implements View.OnClickListener
+    {
+        startConsProdClick()
+        {
+
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            Setup s = new Setup();
+            s.start();
+        }
     }
 
     class startPlayerClick implements View.OnClickListener
