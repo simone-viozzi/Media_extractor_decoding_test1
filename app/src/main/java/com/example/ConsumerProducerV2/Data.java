@@ -1,4 +1,4 @@
-package com.example.ConsumerProducer;
+package com.example.ConsumerProducerV2;
 
 class Data<E>
 {

@@ -15,6 +15,7 @@ import android.widget.Button;
 import com.example.AudioHandler.AudioPlayer;
 import com.example.AudioHandler.AudioRecorder;
 import com.example.ConsumerProducer.Setup;
+import com.example.ConsumerProducerV2.Setup2;
 
 import java.io.IOException;
 
@@ -70,8 +71,8 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View v)
         {
-            Setup s = new Setup();
-            s.start();
+            Setup2 s = new Setup2();
+            s.start(30);
         }
     }
 

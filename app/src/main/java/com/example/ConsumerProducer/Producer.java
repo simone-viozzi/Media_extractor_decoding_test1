@@ -2,28 +2,34 @@ package com.example.ConsumerProducer;
 
 import android.util.Log;
 
-import java.util.Arrays;
+import com.example.TimeClasses.EnlapsedTime;
+
 import java.util.concurrent.BlockingQueue;
 
 class Producer implements Runnable
 {
-    private final BlockingQueue queue;
+    private BlockingQueue queue;
 
     int cont = 0;
+    EnlapsedTime t;
 
-    Producer(BlockingQueue q)
+    Producer(BlockingQueue q, EnlapsedTime t)
     {
         queue = q;
+        this.t = t;
     }
+
 
     public void run()
     {
+        t.Tic();
         try
         {
-            while (true)
+            for (int i = 0; i < 300000; i++)
             {
                 queue.put(produce());
             }
+
         }
         catch (InterruptedException ex)
         {
@@ -31,16 +37,16 @@ class Producer implements Runnable
         }
     }
 
-    Object produce()
+    private Object produce()
     {
-        Data d = new Data<Integer>();
+        Data d = new Data<Integer[]>();
         d.setCounter(cont++);
 
         Integer[] array = new Integer[50];
 
         for (int i = 0; i < array.length; i++)
         {
-            array[i] = cont * i;
+            array[i] = cont / (i+1);
         }
 
         d.setItems(array);
