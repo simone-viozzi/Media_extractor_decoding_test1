@@ -14,8 +14,8 @@ import android.widget.Button;
 
 import com.example.AudioHandler.AudioPlayer;
 import com.example.AudioHandler.AudioRecorder;
-import com.example.ConsumerProducer.Setup;
 import com.example.ConsumerProducerV2.Setup2;
+import com.example.MediaExtractorAsynchronous.MediaCodecAsyncTest;
 
 import java.io.IOException;
 
@@ -58,8 +58,63 @@ public class MainActivity extends AppCompatActivity
         Button startConsProd = findViewById(R.id.ProdCons_btn);
         startConsProd.setOnClickListener(new startConsProdClick());
 
+
+        Button decodeV1 = findViewById(R.id.decode_v1);
+        decodeV1.setOnClickListener(new decodeV1Click());
+
+        Button decodeV2 = findViewById(R.id.decode_v2);
+        decodeV2.setOnClickListener(new decodeV2Click(path));
+
     }
 
+
+    class decodeV2Click implements View.OnClickListener
+    {
+        private String path;
+
+        decodeV2Click(String path)
+        {
+            this.path = path;
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            MediaCodecAsyncTest m;
+            try
+            {
+                m = new MediaCodecAsyncTest(path);
+
+            }
+            catch (IOException e)
+            {
+                Log.v(TAG, "MediaCodecAsyncTest creation error");
+                e.printStackTrace();
+                return;
+            }
+            m.decode();
+        }
+    }
+
+    class decodeV1Click implements View.OnClickListener
+    {
+        decodeV1Click()
+        {
+
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            media_extractor_test m = new media_extractor_test();
+
+            MediaExtractor extractor = m.getHeader();
+
+            m.getData(extractor);
+
+            Log.v(TAG, "ho finito e non sono scoppiato");
+        }
+    }
 
     class startConsProdClick implements View.OnClickListener
     {
@@ -168,16 +223,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void onClickHandler1(View v)
-    {
-        media_extractor_test m = new media_extractor_test();
 
-        MediaExtractor extractor = m.getHeader();
-
-        m.getData(extractor);
-
-        Log.v(TAG, "ho finito e non sono scoppiato");
-    }
 
     public void ask_permission()
     {
