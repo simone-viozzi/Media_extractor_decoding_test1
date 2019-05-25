@@ -16,6 +16,7 @@ import com.example.AudioHandler.AudioPlayer;
 import com.example.AudioHandler.AudioRecorder;
 import com.example.ConsumerProducerV2.Setup2;
 import com.example.MediaExtractorAsynchronous.MediaCodecAsyncTest;
+import com.example.MediaExtractorSyncronusOnThread.Setup;
 
 import java.io.IOException;
 
@@ -65,6 +66,40 @@ public class MainActivity extends AppCompatActivity
         Button decodeV2 = findViewById(R.id.decode_v2);
         decodeV2.setOnClickListener(new decodeV2Click(path));
 
+        Button decodeV3 = findViewById(R.id.decode_v3);
+        decodeV3.setOnClickListener(new decodeV3Click(path));
+
+    }
+
+    private class decodeV3Click implements View.OnClickListener
+    {
+        private String path;
+
+        decodeV3Click(String path)
+        {
+            this.path = path;
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            Setup setup = new Setup(path);
+
+            try
+            {
+                setup.start();
+            }
+            catch (IOException e)
+            {
+                Log.e(TAG, "errore nel file");
+                e.printStackTrace();
+            }
+            catch (InterruptedException e)
+            {
+                Log.e(TAG, "errore nei thread");
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -222,7 +257,6 @@ public class MainActivity extends AppCompatActivity
             Log.v(TAG, "recording stopped");
         }
     }
-
 
 
     public void ask_permission()
