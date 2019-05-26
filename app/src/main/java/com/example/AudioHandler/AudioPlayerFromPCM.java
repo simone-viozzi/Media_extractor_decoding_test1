@@ -27,6 +27,26 @@ public class AudioPlayerFromPCM implements AudioPlayerInterface
         audioTrack = new AudioTrack(audioAttributes, audioFormat, bufferSizeInBytes, AudioTrack.MODE_STREAM, 0);
     }
 
+    /*
+            audioTrack.play();
+
+            short shortBuffer[] = new short[AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT)];
+
+
+            while (!stopRequested)
+            {
+                readData(shortBuffer);
+                audioTrack.write(shortBuffer, 0, shortBuffer.length, AudioTrack.WRITE_BLOCKING);
+            }
+
+     */
+
+    /*
+        to know how many Us of audio where played
+
+        int Us = ( track.getPlaybackHeadPosition( ) / track.getSampleRate( ) );
+     */
+
     @Override
     public void startPlaying()
     {

@@ -2,7 +2,7 @@ package com.example.ConsumerProducer;
 
 import android.util.Log;
 
-import com.example.TimeClasses.EnlapsedTime;
+import com.example.TimeClasses.ElapsedTime;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -13,9 +13,9 @@ class Consumer implements Runnable
 
     String id;
 
-    EnlapsedTime t;
+    ElapsedTime t;
 
-    Consumer(BlockingQueue q, EnlapsedTime t, String id)
+    Consumer(BlockingQueue q, ElapsedTime t, String id)
     {
         queue = q;
         this.id = id;
@@ -36,7 +36,10 @@ class Consumer implements Runnable
         {
             Log.e("consumer " + id, "consume(queue.take()); error");
         }
-        Log.e("consumer " + id, "enlapsed time " + t.TocMillis());
+
+        t.Toc();
+
+        Log.e("consumer " + id, "enlapsed time " + t.getElapsedTimeMillis());
     }
 
 

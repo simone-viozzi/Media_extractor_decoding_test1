@@ -25,10 +25,8 @@
             android:layout_marginStart = "8dp"
             android:layout_marginTop = "8dp"
             android:layout_marginEnd = "8dp"
-            android:layout_marginBottom = "8dp"
             android:text = "decostruct stored audio"
-            app:layout_constraintBottom_toBottomOf = "parent"
-            app:layout_constraintEnd_toStartOf = "@+id/decode_v1"
+            app:layout_constraintEnd_toEndOf = "parent"
             app:layout_constraintStart_toStartOf = "parent"
             app:layout_constraintTop_toTopOf = "parent" />
 
@@ -38,45 +36,42 @@
             android:layout_width = "52dp"
             android:layout_height = "wrap_content"
             android:layout_marginStart = "8dp"
-            android:layout_marginTop = "8dp"
             android:layout_marginEnd = "8dp"
             android:layout_marginBottom = "8dp"
             android:text = "v1"
             app:layout_constraintBottom_toBottomOf = "parent"
             app:layout_constraintEnd_toEndOf = "parent"
+            app:layout_constraintHorizontal_bias = "0.23"
             app:layout_constraintStart_toStartOf = "parent"
-            app:layout_constraintTop_toTopOf = "parent"
-            app:layout_constraintVertical_bias = "0.0" />
+            app:layout_constraintTop_toBottomOf = "@+id/textView" />
 
         <Button
             android:id = "@+id/decode_v2"
             android:layout_width = "52dp"
             android:layout_height = "wrap_content"
             android:layout_marginStart = "8dp"
-            android:layout_marginTop = "8dp"
             android:layout_marginEnd = "8dp"
             android:layout_marginBottom = "8dp"
             android:text = "v2"
             app:layout_constraintBottom_toBottomOf = "parent"
             app:layout_constraintEnd_toEndOf = "parent"
-            app:layout_constraintHorizontal_bias = "0.7"
+            app:layout_constraintHorizontal_bias = "0.51"
             app:layout_constraintStart_toStartOf = "parent"
-            app:layout_constraintTop_toTopOf = "parent" />
+            app:layout_constraintTop_toBottomOf = "@+id/textView" />
 
         <Button
             android:id = "@+id/decode_v3"
             android:layout_width = "52dp"
             android:layout_height = "wrap_content"
             android:layout_marginStart = "8dp"
-            android:layout_marginTop = "8dp"
             android:layout_marginEnd = "8dp"
             android:layout_marginBottom = "8dp"
             android:text = "v3"
             app:layout_constraintBottom_toBottomOf = "parent"
             app:layout_constraintEnd_toEndOf = "parent"
-            app:layout_constraintHorizontal_bias = "0.9"
+            app:layout_constraintHorizontal_bias = "0.77"
             app:layout_constraintStart_toStartOf = "parent"
-            app:layout_constraintTop_toTopOf = "parent" />
+            app:layout_constraintTop_toBottomOf = "@+id/textView" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -246,9 +241,25 @@
             android:layout_marginTop = "8dp"
             android:layout_marginEnd = "8dp"
             android:layout_marginBottom = "8dp"
-            android:text = "start the madness"
+            android:text = "v1"
             app:layout_constraintBottom_toBottomOf = "parent"
             app:layout_constraintEnd_toEndOf = "parent"
+            app:layout_constraintHorizontal_bias = "0.25"
+            app:layout_constraintStart_toStartOf = "parent"
+            app:layout_constraintTop_toBottomOf = "@+id/textView4" />
+
+        <Button
+            android:id = "@+id/ProdConsV2_btn"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_marginStart = "8dp"
+            android:layout_marginTop = "8dp"
+            android:layout_marginEnd = "8dp"
+            android:layout_marginBottom = "8dp"
+            android:text = "v2"
+            app:layout_constraintBottom_toBottomOf = "parent"
+            app:layout_constraintEnd_toEndOf = "parent"
+            app:layout_constraintHorizontal_bias = "0.75"
             app:layout_constraintStart_toStartOf = "parent"
             app:layout_constraintTop_toBottomOf = "@+id/textView4" />
     </android.support.constraint.ConstraintLayout>

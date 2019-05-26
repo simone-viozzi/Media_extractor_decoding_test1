@@ -15,8 +15,10 @@ import android.widget.Button;
 import com.example.AudioHandler.AudioPlayerFromFile;
 import com.example.AudioHandler.AudioRecorder;
 import com.example.ConsumerProducerV2.Setup2;
+import com.example.ConsumerProducerV3.Setup;
+import com.example.DataClasses.ByteArrayPrinterClass;
+import com.example.DataClasses.ByteArrayTransferClass;
 import com.example.MediaExtractorAsynchronous.MediaCodecAsyncTest;
-import com.example.MediaExtractorSyncronusOnThread.Setup;
 
 import java.io.IOException;
 
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity
 {
 
 
-    protected final String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -71,6 +73,8 @@ public class MainActivity extends AppCompatActivity
         Button startConsProd = findViewById(R.id.ProdCons_btn);
         startConsProd.setOnClickListener(new startConsProdClick());
 
+        Button startConsProdV2 = findViewById(R.id.ProdConsV2_btn);
+        startConsProdV2.setOnClickListener(new startConsProdV2Click());
 
         Button decodeV1 = findViewById(R.id.decode_v1);
         decodeV1.setOnClickListener(new decodeV1Click());
@@ -84,6 +88,35 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    private class startConsProdV2Click implements View.OnClickListener
+    {
+        startConsProdV2Click()
+        {
+
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            Setup s = new Setup();
+            try
+            {
+                for (int i = 32; i <= 1024; i = i * 2)
+                {
+                    Log.d(TAG, "i = " + i);
+                    s.start(i);
+                }
+            }
+            catch (InterruptedException e)
+            {
+                Log.e(TAG, "error is some thread");
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     private class decodeV3Click implements View.OnClickListener
     {
         private String path;
@@ -96,10 +129,16 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View v)
         {
-            Setup setup = new Setup(path);
+            ByteArrayTransferClass buff = new ByteArrayTransferClass(512);
+
+            com.example.MediaExtractorSyncronusOnThread.Setup setup = new com.example.MediaExtractorSyncronusOnThread.Setup(path, buff);
+
+            ByteArrayPrinterClass printerClass = new ByteArrayPrinterClass(buff);
+            Thread tP = new Thread(printerClass);
 
             try
             {
+                tP.start();
                 setup.start();
             }
             catch (IOException e)

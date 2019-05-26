@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 class media_extractor_test
 {
     private final String TAG = getClass().getSimpleName();
@@ -62,7 +63,6 @@ class media_extractor_test
             setDecoder(format);
 
 
-
             return extractor;
 
         }
@@ -93,7 +93,6 @@ class media_extractor_test
         }
         return false;
     }
-
 
 
     void getData(MediaExtractor extractor)
@@ -236,7 +235,7 @@ class media_extractor_test
             else
             {
                 Log.v(TAG, "-------------------------------- ne A ne B \n outputBufferId: " + (
-                                outputBufferId==MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
+                        outputBufferId==MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
             }
 
         }

@@ -1,5 +1,6 @@
 package com.example.ConsumerProducerV2;
 
+@Deprecated
 class Data<E>
 {
     private E[] items;

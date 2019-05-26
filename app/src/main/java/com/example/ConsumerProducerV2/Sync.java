@@ -1,5 +1,7 @@
 package com.example.ConsumerProducerV2;
 
+
+@Deprecated
 public class Sync
 {
     private boolean sync;

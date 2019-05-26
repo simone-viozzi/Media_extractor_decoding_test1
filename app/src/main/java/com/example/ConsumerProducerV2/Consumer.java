@@ -3,17 +3,18 @@ package com.example.ConsumerProducerV2;
 import android.support.v4.util.CircularArray;
 import android.util.Log;
 
-import com.example.TimeClasses.EnlapsedTime;
+import com.example.TimeClasses.ElapsedTime;
 
+@Deprecated
 class Consumer implements Runnable
 {
     private CircularArray a;
     private String id;
-    private EnlapsedTime t;
+    private ElapsedTime t;
     private int n = 0;
     private Sync sync;
 
-    Consumer(CircularArray a, EnlapsedTime t, Sync sync, int n, String id)
+    Consumer(CircularArray a, ElapsedTime t, Sync sync, int n, String id)
     {
         this.a = a;
         this.id = id;
@@ -33,8 +34,9 @@ class Consumer implements Runnable
                 i++;
             }
         }
+        t.Toc();
 
-        Log.e("consumer " + id, "enlapsed time " + t.TocMillis());
+        Log.e("consumer " + id, "enlapsed time " + t.getElapsedTimeMillis());
     }
 
 

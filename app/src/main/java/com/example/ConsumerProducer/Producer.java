@@ -2,7 +2,7 @@ package com.example.ConsumerProducer;
 
 import android.util.Log;
 
-import com.example.TimeClasses.EnlapsedTime;
+import com.example.TimeClasses.ElapsedTime;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -13,9 +13,9 @@ class Producer implements Runnable
     private BlockingQueue queue;
 
     int cont = 0;
-    EnlapsedTime t;
+    ElapsedTime t;
 
-    Producer(BlockingQueue q, EnlapsedTime t)
+    Producer(BlockingQueue q, ElapsedTime t)
     {
         queue = q;
         this.t = t;

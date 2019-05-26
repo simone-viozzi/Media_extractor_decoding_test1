@@ -4,26 +4,31 @@ import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.util.Log;
 
+import com.example.DataClasses.ByteArrayTransferClass;
+
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class OutputFromCodec implements Runnable
 {
     private final String TAG = getClass().getSimpleName();
     private MediaCodec decoder;
+    private ByteArrayTransferClass buff;
 
-    OutputFromCodec(MediaCodec decoder)
+    OutputFromCodec(MediaCodec decoder, ByteArrayTransferClass buff)
     {
         this.decoder = decoder;
+
+        this.buff = buff;
     }
 
     @Override
     public void run()
     {
-        int print = 0;
-        boolean flag = true;
-        while (flag)
+        MediaCodec.BufferInfo info;
+        do
         {
-            MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
+            info = new MediaCodec.BufferInfo();
 
             int outputBufferId = decoder.dequeueOutputBuffer(info, 3000);
 
@@ -32,19 +37,22 @@ public class OutputFromCodec implements Runnable
                 ByteBuffer outputBuffer = decoder.getOutputBuffer(outputBufferId);
                 MediaFormat bufferFormat = decoder.getOutputFormat(outputBufferId); // option A
 
-                Log.v(TAG, "-------------------------------- option A");
+                //Log.v(TAG, "-------------------------------- option A");
 
                 if (outputBuffer != null)
                 {
+                    //Log.e(TAG, "outputBuffer.hasArray() = " + outputBuffer.hasArray());
+                    //Log.d(TAG, "outputBuffer.remaining() = " + outputBuffer.remaining());
 
-                    if (outputBuffer.hasArray())
-                    {
-                        byte[] data = outputBuffer.array();
+                    byte[] b = new byte[outputBuffer.remaining()];
+                    outputBuffer.get(b);
+                    Log.d(TAG, "data -> " + Arrays.toString(b));
+                    buff.enqueue(b);
 
-                    }
+                    //Log.d(TAG, "outputBuffer.remaining() = " + outputBuffer.remaining());
 
-
-                    /*int cont = 0;
+                    /*
+                    int cont = 0;
                     List<Byte> dati = new ArrayList<>();
                     while (outputBuffer.hasRemaining())
                     {
@@ -62,7 +70,8 @@ public class OutputFromCodec implements Runnable
                     }
                     print++;
 
-                    Log.v(TAG, "presentationTimeUs: " + (info.presentationTimeUs + info.size));*/
+                    Log.v(TAG, "presentationTimeUs: " + (info.presentationTimeUs + info.size));
+                    */
                 }
                 else
                 {
@@ -85,15 +94,11 @@ public class OutputFromCodec implements Runnable
             }
             else
             {
-                Log.v(TAG, "-------------------------------- ne A ne B \n outputBufferId: " + (
-                        outputBufferId == MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
+                // Log.v(TAG, "-------------------------------- ne A ne B \n outputBufferId: " + (
+                //      outputBufferId == MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
             }
 
-            //if (info.presentationTimeUs == 0)
-            if (info.flags == MediaCodec.BUFFER_FLAG_END_OF_STREAM)
-            {
-                flag = false;
-            }
         }
+        while (info.flags != MediaCodec.BUFFER_FLAG_END_OF_STREAM);
     }
 }

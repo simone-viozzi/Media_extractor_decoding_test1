@@ -1,16 +1,10 @@
 package com.example.ConsumerProducerV2;
 
 import android.support.v4.util.CircularArray;
-import android.util.Log;
 
-import com.example.ConsumerProducerV2.Consumer;
-import com.example.ConsumerProducerV2.Data;
-import com.example.ConsumerProducerV2.Producer;
-import com.example.TimeClasses.EnlapsedTime;
+import com.example.TimeClasses.ElapsedTime;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
+@Deprecated
 public class Setup2
 {
     public void start(int n)
@@ -19,7 +13,7 @@ public class Setup2
         Sync sync = new Sync();
         sync.setSync(false);
 
-        EnlapsedTime t = new EnlapsedTime();
+        ElapsedTime t = new ElapsedTime();
 
         Producer p = new Producer(a, t, sync, n);
         Consumer c1 = new Consumer(a, t, sync, n, "c1");

@@ -1,6 +1,6 @@
 package com.example.ConsumerProducer;
 
-import com.example.TimeClasses.EnlapsedTime;
+import com.example.TimeClasses.ElapsedTime;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -13,7 +13,7 @@ public class Setup
     {
         BlockingQueue q = new ArrayBlockingQueue<Data<Integer[]>>(10, true);
 
-        EnlapsedTime t = new EnlapsedTime();
+        ElapsedTime t = new ElapsedTime();
 
         Producer p = new Producer(q, t);
         Consumer c1 = new Consumer(q, t, "c1");

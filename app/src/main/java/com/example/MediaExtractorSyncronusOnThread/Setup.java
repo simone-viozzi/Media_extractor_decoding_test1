@@ -5,6 +5,8 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.util.Log;
 
+import com.example.DataClasses.ByteArrayTransferClass;
+
 import java.io.IOException;
 
 public class Setup
@@ -12,14 +14,16 @@ public class Setup
     private final String TAG = getClass().getSimpleName();
 
     private String path;
+    private ByteArrayTransferClass buff;
 
 
-    public Setup(String path)
+    public Setup(String path, ByteArrayTransferClass buff)
     {
         this.path = path;
 
         //this.path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC) + "/test_audio_file/audio2.m4a";
         //Log.v(TAG, "path: " + path);
+        this.buff = buff;
     }
 
     public void start() throws IOException, InterruptedException
@@ -46,7 +50,8 @@ public class Setup
 
 
         InputFromFile inputFromFile = new InputFromFile(decoder, extractor);
-        OutputFromCodec outputFromCodec = new OutputFromCodec(decoder);
+        OutputFromCodec outputFromCodec = new OutputFromCodec(decoder, buff);
+        inputFromFile.setup(); // TODO forse e' meglio spostarlo sopra
         decoder.start();
 
         Thread t1 = new Thread(inputFromFile);

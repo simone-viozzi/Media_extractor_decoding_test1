@@ -20,7 +20,7 @@ public class InputFromFile implements Runnable
         this.extractor = extractor;
     }
 
-    void setup()
+    void setup() // TODO se lo fa nel costruttore funziona?
     {
         MediaFormat outputFormat = decoder.getOutputFormat();
         Log.v(TAG, "outputFormat: " + outputFormat.toString());
@@ -66,14 +66,14 @@ public class InputFromFile implements Runnable
                     }
                     else
                     {
-                        Log.v(TAG, "presentationTimeUs: " + extractor.getSampleTime());
+                        //Log.v(TAG, "presentationTimeUs: " + extractor.getSampleTime());
 
                         //extractor.getSampleTime();
 
                         decoder.queueInputBuffer(inIndex, 0, sampleSize, extractor.getSampleTime(), 0);
                         extractor.advance();
 
-                        Log.v(TAG, "extractor.advance()");
+                        //Log.v(TAG, "extractor.advance()");
 
 
                     }

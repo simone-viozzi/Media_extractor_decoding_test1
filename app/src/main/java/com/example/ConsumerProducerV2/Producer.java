@@ -1,21 +1,22 @@
 package com.example.ConsumerProducerV2;
 
 import android.support.v4.util.CircularArray;
-import android.util.Log;
 
-import com.example.TimeClasses.EnlapsedTime;
+import com.example.TimeClasses.ElapsedTime;
 
+
+@Deprecated
 class Producer implements Runnable
 {
     private CircularArray a;
 
     private int cont = 0;
-    private EnlapsedTime t;
+    private ElapsedTime t;
     private int n = 0;
     private Sync sync;
 
 
-    Producer(CircularArray a, EnlapsedTime t, Sync sync, int n)
+    Producer(CircularArray a, ElapsedTime t, Sync sync, int n)
     {
         this.a = a;
         this.t = t;
@@ -27,7 +28,7 @@ class Producer implements Runnable
     public void run()
     {
         t.Tic();
-        for (int i = 0; i < n;)
+        for (int i = 0; i < n; )
         {
             if (a.size() < 60)
             {
@@ -35,7 +36,8 @@ class Producer implements Runnable
                 {
                     sync.setSync(false);
                 }
-                else{
+                else
+                {
                     sync.setSync(true);
                 }
                 a.addLast(produce());
