@@ -1,13 +1,12 @@
 package com.example.ConsumerProducer;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.example.TimeClasses.EnlapsedTime;
 
-import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 
+@Deprecated
 class Consumer implements Runnable
 {
     private BlockingQueue queue;

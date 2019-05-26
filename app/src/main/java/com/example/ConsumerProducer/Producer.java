@@ -6,6 +6,8 @@ import com.example.TimeClasses.EnlapsedTime;
 
 import java.util.concurrent.BlockingQueue;
 
+
+@Deprecated
 class Producer implements Runnable
 {
     private BlockingQueue queue;

@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 /**
  *
  */
+@Deprecated
 public class DataProducer
 {
     DataOutputStream stream;

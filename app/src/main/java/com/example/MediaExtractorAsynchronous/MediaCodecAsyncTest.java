@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class MediaCodecAsyncTest
 {
     private final String TAG = getClass().getSimpleName();

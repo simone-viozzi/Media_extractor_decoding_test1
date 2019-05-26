@@ -5,8 +5,6 @@ import android.media.MediaFormat;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OutputFromCodec implements Runnable
 {
@@ -38,7 +36,15 @@ public class OutputFromCodec implements Runnable
 
                 if (outputBuffer != null)
                 {
-                    int cont = 0;
+
+                    if (outputBuffer.hasArray())
+                    {
+                        byte[] data = outputBuffer.array();
+
+                    }
+
+
+                    /*int cont = 0;
                     List<Byte> dati = new ArrayList<>();
                     while (outputBuffer.hasRemaining())
                     {
@@ -56,7 +62,7 @@ public class OutputFromCodec implements Runnable
                     }
                     print++;
 
-                    Log.v(TAG, "presentationTimeUs: " + (info.presentationTimeUs + info.size));
+                    Log.v(TAG, "presentationTimeUs: " + (info.presentationTimeUs + info.size));*/
                 }
                 else
                 {
@@ -83,6 +89,7 @@ public class OutputFromCodec implements Runnable
                         outputBufferId == MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
             }
 
+            //if (info.presentationTimeUs == 0)
             if (info.flags == MediaCodec.BUFFER_FLAG_END_OF_STREAM)
             {
                 flag = false;

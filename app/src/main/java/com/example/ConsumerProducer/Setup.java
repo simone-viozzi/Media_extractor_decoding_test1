@@ -1,12 +1,12 @@
 package com.example.ConsumerProducer;
 
-import android.util.Log;
-
 import com.example.TimeClasses.EnlapsedTime;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+
+@Deprecated
 public class Setup
 {
     public void start()

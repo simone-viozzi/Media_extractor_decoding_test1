@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.AudioHandler.AudioPlayer;
+import com.example.AudioHandler.AudioPlayerFromFile;
 import com.example.AudioHandler.AudioRecorder;
 import com.example.ConsumerProducerV2.Setup2;
 import com.example.MediaExtractorAsynchronous.MediaCodecAsyncTest;
@@ -22,6 +22,8 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
 {
+
+
     protected final String TAG = getClass().getSimpleName();
 
     @Override
@@ -47,10 +49,20 @@ public class MainActivity extends AppCompatActivity
         stopRecording.setOnClickListener(new stopRecordingClick(r));
 
 
-        AudioPlayer p = new AudioPlayer();
+        AudioPlayerFromFile p = null;
+        try
+        {
+            p = new AudioPlayerFromFile(path);
+        }
+        catch (IOException e)
+        {
+            Log.e(TAG, "path non trovato");
+            e.printStackTrace();
+            return;
+        }
 
         Button startPlayer = findViewById(R.id.playerStart);
-        startPlayer.setOnClickListener(new startPlayerClick(p, path));
+        startPlayer.setOnClickListener(new startPlayerClick(p));
 
         Button stopPlayer = findViewById(R.id.playerStop);
         stopPlayer.setOnClickListener(new stopPlayerClick(p));
@@ -68,6 +80,7 @@ public class MainActivity extends AppCompatActivity
 
         Button decodeV3 = findViewById(R.id.decode_v3);
         decodeV3.setOnClickListener(new decodeV3Click(path));
+
 
     }
 
@@ -168,37 +181,27 @@ public class MainActivity extends AppCompatActivity
 
     class startPlayerClick implements View.OnClickListener
     {
-        AudioPlayer p;
-        String path;
+        AudioPlayerFromFile p;
 
-        startPlayerClick(AudioPlayer p, String path)
+        startPlayerClick(AudioPlayerFromFile p)
         {
             this.p = p;
-            this.path = path;
         }
 
         @Override
         public void onClick(View v)
         {
             Log.v(TAG, "starting playing");
-            try
-            {
-                p.startPlaying(path);
-            }
-            catch (IOException e)
-            {
-                Log.v(TAG, "falied to prepare");
-                return;
-            }
+            p.startPlaying();
             Log.v(TAG, "playing started");
         }
     }
 
     class stopPlayerClick implements View.OnClickListener
     {
-        AudioPlayer p;
+        AudioPlayerFromFile p;
 
-        stopPlayerClick(AudioPlayer p)
+        stopPlayerClick(AudioPlayerFromFile p)
         {
             this.p = p;
         }
