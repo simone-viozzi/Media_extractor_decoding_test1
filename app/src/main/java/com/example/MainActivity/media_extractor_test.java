@@ -1,4 +1,4 @@
-package com.example.media_extractor_test1;
+package com.example.MainActivity;
 
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
@@ -11,9 +11,10 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class media_extractor_test
+@Deprecated
+class media_extractor_test
 {
-    protected final String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     //private long mAudioDurationUs;
     private String mAudioKeyMine;
@@ -26,7 +27,7 @@ public class media_extractor_test
     }
 
 
-    public MediaExtractor getHeader()
+    MediaExtractor getHeader()
     {
         Log.v(TAG, "media_exctractor_test called");
 
@@ -61,6 +62,7 @@ public class media_extractor_test
 
             setDecoder(format);
 
+
             return extractor;
 
         }
@@ -93,8 +95,7 @@ public class media_extractor_test
     }
 
 
-
-    public void getData(MediaExtractor extractor)
+    void getData(MediaExtractor extractor)
     {
         Log.v(TAG, "buffer allocated");
 
@@ -234,7 +235,7 @@ public class media_extractor_test
             else
             {
                 Log.v(TAG, "-------------------------------- ne A ne B \n outputBufferId: " + (
-                                outputBufferId==MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
+                        outputBufferId==MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
             }
 
         }
