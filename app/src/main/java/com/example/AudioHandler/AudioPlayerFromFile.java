@@ -12,14 +12,24 @@ public class AudioPlayerFromFile implements AudioPlayerInterface
     {
         player = new MediaPlayer();
         player.setDataSource(fileName);
-        player.prepare();
     }
 
     @Override
     public void startPlaying()
     {
-        player.start();
+        player.setOnPreparedListener(new playerListener());
+        player.prepareAsync();
     }
+
+    class playerListener implements MediaPlayer.OnPreparedListener
+    {
+        @Override
+        public void onPrepared(MediaPlayer player)
+        {
+            player.start();
+        }
+    }
+
 
     @Override
     public void pausePlayer()

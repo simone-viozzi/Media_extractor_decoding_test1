@@ -1,4 +1,4 @@
-package com.example.media_extractor_test1;
+package com.example.MainActivity;
 
 import android.media.MediaCodec;
 import android.media.MediaExtractor;

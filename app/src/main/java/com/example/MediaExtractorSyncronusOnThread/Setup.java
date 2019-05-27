@@ -5,7 +5,7 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.util.Log;
 
-import com.example.DataClasses.ByteArrayTransferClass;
+import com.example.DataClasses.ByteArrayTransferClassV2;
 
 import java.io.IOException;
 
@@ -14,10 +14,14 @@ public class Setup
     private final String TAG = getClass().getSimpleName();
 
     private String path;
-    private ByteArrayTransferClass buff;
+    private ByteArrayTransferClassV2 buff;
+    private int sampleRate = 0;
+    private MediaCodec decoder;
+    private FromFileToCodec fromFileToCodec;
+    private FromCodecToBuff fromCodecToBuff;
 
 
-    public Setup(String path, ByteArrayTransferClass buff)
+    public Setup(String path, ByteArrayTransferClassV2 buff)
     {
         this.path = path;
 
@@ -26,7 +30,7 @@ public class Setup
         this.buff = buff;
     }
 
-    public void start() throws IOException, InterruptedException
+    public void configure() throws IOException
     {
         MediaExtractor extractor = new MediaExtractor();
 
@@ -43,26 +47,30 @@ public class Setup
 
         extractor.selectTrack(0);
 
-        MediaCodec decoder = MediaCodec.createDecoderByType(mAudioKeyMine); // non so se mAudioKeyMine va li'
+        decoder = MediaCodec.createDecoderByType(mAudioKeyMine); // non so se mAudioKeyMine va li'
         decoder.configure(format, null, null, 0);
 
         Log.v(TAG, "setDecoder called: " + format.toString());
 
 
-        InputFromFile inputFromFile = new InputFromFile(decoder, extractor);
-        OutputFromCodec outputFromCodec = new OutputFromCodec(decoder, buff);
-        inputFromFile.setup(); // TODO forse e' meglio spostarlo sopra
+        fromFileToCodec = new FromFileToCodec(decoder, extractor);
+        fromCodecToBuff = new FromCodecToBuff(decoder, buff);
+        fromFileToCodec.setup(); // TODO forse e' meglio spostarlo sopra
+    }
+
+    public void start() throws InterruptedException
+    {
         decoder.start();
 
-        Thread t1 = new Thread(inputFromFile);
-        Thread t2 = new Thread(outputFromCodec);
+        Thread t1 = new Thread(fromFileToCodec);
+        Thread t2 = new Thread(fromCodecToBuff);
         t1.start();
         t2.start();
-
-
-        t1.join();
-        t2.join();
     }
 
 
+    public int getSampleRate()
+    {
+        return fromFileToCodec.getSampleRate();
+    }
 }

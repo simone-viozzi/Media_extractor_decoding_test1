@@ -1,4 +1,4 @@
-package com.example.media_extractor_test1;
+package com.example.MainActivity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -13,12 +13,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.AudioHandler.AudioPlayerFromFile;
+import com.example.AudioHandler.AudioPlayerFromPCM;
 import com.example.AudioHandler.AudioRecorder;
 import com.example.ConsumerProducerV2.Setup2;
 import com.example.ConsumerProducerV3.Setup;
 import com.example.DataClasses.ByteArrayPrinterClass;
-import com.example.DataClasses.ByteArrayTransferClass;
+import com.example.DataClasses.ByteArrayTransferClassV2;
 import com.example.MediaExtractorAsynchronous.MediaCodecAsyncTest;
+import com.example.media_extractor_test1.R;
 
 import java.io.IOException;
 
@@ -69,12 +71,18 @@ public class MainActivity extends AppCompatActivity
         Button stopPlayer = findViewById(R.id.playerStop);
         stopPlayer.setOnClickListener(new stopPlayerClick(p));
 
+        Button startPlayerFromPCM = findViewById(R.id.playerStartFromPCM);
+        startPlayerFromPCM.setOnClickListener(new startPlayerFromPCMClick(path));
+
 
         Button startConsProd = findViewById(R.id.ProdCons_btn);
         startConsProd.setOnClickListener(new startConsProdClick());
 
-        Button startConsProdV2 = findViewById(R.id.ProdConsV2_btn);
+        Button startConsProdV2 = findViewById(R.id.ProdConsV3_btn);
         startConsProdV2.setOnClickListener(new startConsProdV2Click());
+
+        Button startConsProdV4 = findViewById(R.id.ProdConsV4_btn);
+        startConsProdV4.setOnClickListener(new startConsProdV4Click());
 
         Button decodeV1 = findViewById(R.id.decode_v1);
         decodeV1.setOnClickListener(new decodeV1Click());
@@ -86,6 +94,63 @@ public class MainActivity extends AppCompatActivity
         decodeV3.setOnClickListener(new decodeV3Click(path));
 
 
+    }
+
+
+    private class startPlayerFromPCMClick implements View.OnClickListener
+    {
+        private String path;
+
+        startPlayerFromPCMClick(String path)
+        {
+            this.path = path;
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            ByteArrayTransferClassV2 buff = new ByteArrayTransferClassV2(64);
+
+            com.example.MediaExtractorSyncronusOnThread.Setup decoder = new com.example.MediaExtractorSyncronusOnThread.Setup(path, buff);
+            try
+            {
+                decoder.configure();
+                AudioPlayerFromPCM player = new AudioPlayerFromPCM(decoder.getSampleRate(), buff);
+
+                decoder.start();
+
+                player.startPlaying();
+            }
+            catch (IOException e)
+            {
+                Log.e(TAG, "errore nel file");
+                e.printStackTrace();
+            }
+            catch (InterruptedException e)
+            {
+                Log.e(TAG, "errore nei thread");
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private class startConsProdV4Click implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View v)
+        {
+            com.example.ConsumerProducerV4.Setup s = new com.example.ConsumerProducerV4.Setup();
+            try
+            {
+                s.start();
+            }
+            catch (InterruptedException e)
+            {
+                Log.e(TAG, "errore nei thread");
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -129,9 +194,18 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View v)
         {
-            ByteArrayTransferClass buff = new ByteArrayTransferClass(512);
+            ByteArrayTransferClassV2 buff = new ByteArrayTransferClassV2(512);
 
             com.example.MediaExtractorSyncronusOnThread.Setup setup = new com.example.MediaExtractorSyncronusOnThread.Setup(path, buff);
+            try
+            {
+                setup.configure();
+            }
+            catch (IOException e)
+            {
+                Log.e(TAG, "errore nel file");
+                e.printStackTrace();
+            }
 
             ByteArrayPrinterClass printerClass = new ByteArrayPrinterClass(buff);
             Thread tP = new Thread(printerClass);
@@ -140,11 +214,6 @@ public class MainActivity extends AppCompatActivity
             {
                 tP.start();
                 setup.start();
-            }
-            catch (IOException e)
-            {
-                Log.e(TAG, "errore nel file");
-                e.printStackTrace();
             }
             catch (InterruptedException e)
             {
@@ -252,7 +321,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class startRecordingClick implements View.OnClickListener
+    private class startRecordingClick implements View.OnClickListener
     {
         AudioRecorder r;
         String path;
@@ -282,7 +351,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    class stopRecordingClick implements View.OnClickListener
+    private class stopRecordingClick implements View.OnClickListener
     {
         AudioRecorder r;
 
@@ -301,7 +370,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void ask_permission()
+    private void ask_permission()
     {
 
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)

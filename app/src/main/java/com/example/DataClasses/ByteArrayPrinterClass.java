@@ -2,44 +2,37 @@ package com.example.DataClasses;
 
 import android.util.Log;
 
-import java.io.EOFException;
 import java.util.Arrays;
 
 public class ByteArrayPrinterClass implements Runnable
 {
     private final String TAG = getClass().getSimpleName();
-    private ByteArrayTransferClass buff;
+    private ByteArrayTransferClassV2 buff;
 
-    public ByteArrayPrinterClass(ByteArrayTransferClass buff)
+    public ByteArrayPrinterClass(ByteArrayTransferClassV2 buff)
     {
         this.buff = buff;
-        Log.e(TAG, "ce so pure io");
     }
 
     @Override
     public void run()
     {
-        Log.e(TAG, "ce so pure io v2");
-
-        while (true)
+        while (!buff.isWorkDone())
         {
-            try
+            while (!buff.isOkToDequeue())
             {
-                //Log.e(TAG, "ce so pure io v3");
-                byte[] b = buff.dequeue();
-                String s = Arrays.toString(b);
-                Log.w(TAG, "i dati ricevuti sono -> " + s);
+                try
+                {
+                    Thread.sleep(1);
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
             }
-            catch (ArrayStoreException e)
-            {
-                //wwsw
-            }
-            catch (EOFException e)
-            {
-                Log.w(TAG, "lavoro finito");
-                break;
-            }
-
+            byte[] b = buff.dequeue();
+            String s = Arrays.toString(b);
+            Log.w(TAG, "i dati ricevuti sono -> " + s);
         }
 
     }

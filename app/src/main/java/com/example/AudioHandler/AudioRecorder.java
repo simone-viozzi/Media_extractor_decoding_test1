@@ -1,7 +1,6 @@
 package com.example.AudioHandler;
 
 import android.media.MediaRecorder;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -22,6 +21,7 @@ public class AudioRecorder
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setOutputFile(path);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC_ELD);
+        recorder.setAudioSamplingRate(44100);
     }
 
 

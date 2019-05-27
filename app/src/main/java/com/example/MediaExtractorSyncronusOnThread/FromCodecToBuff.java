@@ -4,18 +4,17 @@ import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.util.Log;
 
-import com.example.DataClasses.ByteArrayTransferClass;
+import com.example.DataClasses.ByteArrayTransferClassV2;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
-public class OutputFromCodec implements Runnable
+public class FromCodecToBuff implements Runnable
 {
     private final String TAG = getClass().getSimpleName();
     private MediaCodec decoder;
-    private ByteArrayTransferClass buff;
+    private ByteArrayTransferClassV2 buff;
 
-    OutputFromCodec(MediaCodec decoder, ByteArrayTransferClass buff)
+    FromCodecToBuff(MediaCodec decoder, ByteArrayTransferClassV2 buff)
     {
         this.decoder = decoder;
 
@@ -46,32 +45,13 @@ public class OutputFromCodec implements Runnable
 
                     byte[] b = new byte[outputBuffer.remaining()];
                     outputBuffer.get(b);
-                    Log.d(TAG, "data -> " + Arrays.toString(b));
+                    //Log.d(TAG, "data -> " + Arrays.toString(b));
+                    while (!buff.isOkToEnqueue())
+                    {
+                    }
                     buff.enqueue(b);
+                    //Log.w(TAG, "dati caricati");
 
-                    //Log.d(TAG, "outputBuffer.remaining() = " + outputBuffer.remaining());
-
-                    /*
-                    int cont = 0;
-                    List<Byte> dati = new ArrayList<>();
-                    while (outputBuffer.hasRemaining())
-                    {
-                        int pos = outputBuffer.position();
-                        byte data = outputBuffer.get();
-
-                        dati.add(data);
-
-                        cont++;
-                    }
-
-                    if (print < 10)
-                    {
-                        Log.v(TAG, "cont -> " + cont + " -> data -> " + dati.toString());
-                    }
-                    print++;
-
-                    Log.v(TAG, "presentationTimeUs: " + (info.presentationTimeUs + info.size));
-                    */
                 }
                 else
                 {
@@ -85,12 +65,12 @@ public class OutputFromCodec implements Runnable
             else if (outputBufferId == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED)
             {
 
-                Log.v(TAG, "-------------------------------- option B");
+                //Log.v(TAG, "-------------------------------- option B");
                 // Subsequent data will conform to new format.
                 // Can ignore if using getOutputFormat(outputBufferId)
                 MediaFormat outputFormat = decoder.getOutputFormat(); // option B
 
-                Log.v(TAG, "outputFormat: " + outputFormat.toString());
+                Log.v(TAG, "new outputFormat: " + outputFormat.toString());
             }
             else
             {
@@ -100,5 +80,7 @@ public class OutputFromCodec implements Runnable
 
         }
         while (info.flags != MediaCodec.BUFFER_FLAG_END_OF_STREAM);
+
+        buff.setWorkDone(true);
     }
 }

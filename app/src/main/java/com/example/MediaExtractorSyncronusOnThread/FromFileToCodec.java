@@ -8,13 +8,14 @@ import android.util.Log;
 import java.nio.ByteBuffer;
 
 
-public class InputFromFile implements Runnable
+public class FromFileToCodec implements Runnable
 {
     private final String TAG = getClass().getSimpleName();
     private MediaCodec decoder;
     private MediaExtractor extractor;
+    private int sampleRate = 0;
 
-    InputFromFile(MediaCodec decoder, MediaExtractor extractor)
+    FromFileToCodec(MediaCodec decoder, MediaExtractor extractor)
     {
         this.decoder = decoder;
         this.extractor = extractor;
@@ -23,6 +24,7 @@ public class InputFromFile implements Runnable
     void setup() // TODO se lo fa nel costruttore funziona?
     {
         MediaFormat outputFormat = decoder.getOutputFormat();
+        sampleRate = outputFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
         Log.v(TAG, "outputFormat: " + outputFormat.toString());
     }
 
@@ -81,5 +83,14 @@ public class InputFromFile implements Runnable
 
             }
         }
+    }
+
+    public int getSampleRate()
+    {
+        if (sampleRate == 0)
+        {
+            throw new IllegalStateException("prima chiama il setup!");
+        }
+        return sampleRate;
     }
 }

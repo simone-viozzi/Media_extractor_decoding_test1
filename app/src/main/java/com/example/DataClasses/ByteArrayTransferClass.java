@@ -9,6 +9,7 @@ import java.io.EOFException;
 // TODO da rivedere le primitive di sincronizzazione perche' il consumer e' un sacco
 //  piu veloce del producer e cio fa pensare a questa classe che il lavoro sia finito
 //  basta mettere un boolean che dice quando il lavoro e' effettivamente finito
+//  i'm so stupid!
 
 public class ByteArrayTransferClass
 {
