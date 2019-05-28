@@ -11,6 +11,7 @@ import java.io.EOFException;
 //  basta mettere un boolean che dice quando il lavoro e' effettivamente finito
 //  i'm so stupid!
 
+@Deprecated
 public class ByteArrayTransferClass
 {
     private final String TAG = getClass().getSimpleName();

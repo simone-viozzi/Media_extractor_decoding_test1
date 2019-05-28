@@ -5,12 +5,6 @@ import android.util.Log;
 
 public class ByteArrayTransferClassV2
 {
-    /*
-     *  to sleep
-     *  Thread.sleep(milliseconds);
-     * */
-
-
     private final String TAG = getClass().getSimpleName();
     private CircularArray<byte[]> circularArray;
     private int bufferCapacity;
@@ -45,9 +39,10 @@ public class ByteArrayTransferClassV2
         else
         {
             byte[] b = circularArray.popFirst();
-            if (b == null)
+            if (b == null) // TODO b non deve essere mai nullo!!!!! soprattutto perche non carico mai un valore null nell'array.
             {
                 Log.e(TAG, "perche cazzo questo mi da un buffer vuoto???");
+                throw new NullPointerException("perche??");
             }
             return b;
         }
@@ -55,7 +50,6 @@ public class ByteArrayTransferClassV2
 
     public boolean isWorkDone()
     {
-        //Log.e(TAG, "workDone? -> " + (workDone & (circularArray.size() == 0)));
         return (workDone & (circularArray.size() == 0));
     }
 
@@ -71,7 +65,6 @@ public class ByteArrayTransferClassV2
 
     public boolean isOkToDequeue()
     {
-        //Log.w(TAG, "isOkToDequeue? -> " + (circularArray.size() > 0));
         return (circularArray.size() > 0);
     }
 }
