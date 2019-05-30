@@ -42,6 +42,7 @@ public class FromBuffToFile //TODO !!!
                 break;
         }
         muxer = new MediaMuxer(path + ext, format);
+        
     }
 
 
