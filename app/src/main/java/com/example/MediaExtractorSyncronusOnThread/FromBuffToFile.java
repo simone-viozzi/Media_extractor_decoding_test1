@@ -17,9 +17,32 @@ public class FromBuffToFile //TODO !!!
     private MediaMuxer muxer;
 
 
-    FromBuffToFile(String path, int format) throws IOException
+    /**
+     * @param path   the path where the file will be saved
+     * @param format the format of the output file
+     *
+     * @throws IOException if the path is invalid
+     */
+    FromBuffToFile(String path, @Format int format) throws IOException
     {
-        muxer = new MediaMuxer(path, format);
-
+        String ext = "";
+        switch (format)
+        {
+            case MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4:
+                ext = ".mp4";
+                break;
+            case MediaMuxer.OutputFormat.MUXER_OUTPUT_WEBM:
+                ext = ".webm";
+                break;
+            case MediaMuxer.OutputFormat.MUXER_OUTPUT_3GPP:
+                ext = ".3gp";
+                break;
+            case MediaMuxer.OutputFormat.MUXER_OUTPUT_HEIF:
+                ext = ".heif";
+                break;
+        }
+        muxer = new MediaMuxer(path + ext, format);
     }
+
+
 }
