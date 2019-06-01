@@ -60,6 +60,7 @@ public class FromBuffToCodec implements Runnable
                         decoder.queueInputBuffer(inIndex, 0, b.length, presentationTimeUs, 0);
 
                         //Log.d(TAG, "4 ok");
+                        
                     }
                 }
                 else
