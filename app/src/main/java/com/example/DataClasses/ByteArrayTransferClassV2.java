@@ -9,6 +9,7 @@ public class ByteArrayTransferClassV2
     private CircularArray<byte[]> circularArray;
     private int bufferCapacity;
     private boolean workDone = false;
+    private long transeredBytes = 0;
 
     public ByteArrayTransferClassV2(int bufferCapacity)
     {
@@ -20,6 +21,7 @@ public class ByteArrayTransferClassV2
     {
         if (circularArray.size() < bufferCapacity)
         {
+            transeredBytes += 1024;
             circularArray.addLast(data);
         }
         else
@@ -55,6 +57,7 @@ public class ByteArrayTransferClassV2
 
     public void setWorkDone(boolean workDone)
     {
+        Log.d(TAG, "transfered " + transeredBytes + " bytes");
         this.workDone = workDone;
     }
 

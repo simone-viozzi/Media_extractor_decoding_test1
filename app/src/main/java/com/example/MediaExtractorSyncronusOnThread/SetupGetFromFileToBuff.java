@@ -9,19 +9,18 @@ import com.example.DataClasses.ByteArrayTransferClassV2;
 
 import java.io.IOException;
 
-public class Setup
+public class SetupGetFromFileToBuff
 {
     private final String TAG = getClass().getSimpleName();
 
     private String path;
     private ByteArrayTransferClassV2 buff;
-    private int sampleRate = 0;
     private MediaCodec decoder;
     private FromFileToCodec fromFileToCodec;
     private FromCodecToBuff fromCodecToBuff;
 
 
-    public Setup(String path, ByteArrayTransferClassV2 buff)
+    public SetupGetFromFileToBuff(String path, ByteArrayTransferClassV2 buff)
     {
         this.path = path;
 
@@ -47,7 +46,7 @@ public class Setup
 
         extractor.selectTrack(0);
 
-        decoder = MediaCodec.createDecoderByType(mAudioKeyMine); // non so se mAudioKeyMine va li'
+        decoder = MediaCodec.createDecoderByType(mAudioKeyMine);
         decoder.configure(format, null, null, 0);
 
         Log.v(TAG, "setDecoder called: " + format.toString());
@@ -68,6 +67,13 @@ public class Setup
         t2.start();
     }
 
+    public MediaFormat getOutputFormat()
+    {
+        while (!fromCodecToBuff.isOutputFormatReady())
+        {
+        }
+        return fromCodecToBuff.getOutputFormat();
+    }
 
     public int getSampleRate()
     {

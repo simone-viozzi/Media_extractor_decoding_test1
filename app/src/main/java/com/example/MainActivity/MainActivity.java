@@ -3,6 +3,8 @@ package com.example.MainActivity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.media.MediaExtractor;
+import android.media.MediaFormat;
+import android.media.MediaMuxer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -20,6 +22,8 @@ import com.example.ConsumerProducerV3.Setup;
 import com.example.DataClasses.ByteArrayPrinterClass;
 import com.example.DataClasses.ByteArrayTransferClassV2;
 import com.example.MediaExtractorAsynchronous.MediaCodecAsyncTest;
+import com.example.MediaExtractorSyncronusOnThread.SetupGetFromBuffToFile;
+import com.example.MediaExtractorSyncronusOnThread.SetupGetFromFileToBuff;
 import com.example.media_extractor_test1.R;
 
 import java.io.IOException;
@@ -40,14 +44,14 @@ public class MainActivity extends AppCompatActivity
 
         ask_permission();
 
-        String path = getExternalCacheDir().getAbsolutePath();
-        path += "/audiorecordtest.mp4";
-        Log.d(TAG, path);
+        String mainPath = getExternalCacheDir().getAbsolutePath();
+        String path1 = mainPath + "/audiorecordtest.mp4";
+        Log.d(TAG, path1);
 
         AudioRecorder r = new AudioRecorder();
 
         Button startRecording = findViewById(R.id.recordingStart);
-        startRecording.setOnClickListener(new startRecordingClick(r, path));
+        startRecording.setOnClickListener(new startRecordingClick(r, path1));
 
         Button stopRecording = findViewById(R.id.recordingStop);
         stopRecording.setOnClickListener(new stopRecordingClick(r));
@@ -56,7 +60,7 @@ public class MainActivity extends AppCompatActivity
         AudioPlayerFromFile p = null;
         try
         {
-            p = new AudioPlayerFromFile(path);
+            p = new AudioPlayerFromFile(path1);
         }
         catch (IOException e)
         {
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         stopPlayer.setOnClickListener(new stopPlayerClick(p));
 
         Button startPlayerFromPCM = findViewById(R.id.playerStartFromPCM);
-        startPlayerFromPCM.setOnClickListener(new startPlayerFromPCMClick(path));
+        startPlayerFromPCM.setOnClickListener(new startPlayerFromPCMClick(path1));
 
 
         Button startConsProd = findViewById(R.id.ProdCons_btn);
@@ -88,12 +92,59 @@ public class MainActivity extends AppCompatActivity
         decodeV1.setOnClickListener(new decodeV1Click());
 
         Button decodeV2 = findViewById(R.id.decode_v2);
-        decodeV2.setOnClickListener(new decodeV2Click(path));
+        decodeV2.setOnClickListener(new decodeV2Click(path1));
 
         Button decodeV3 = findViewById(R.id.decode_v3);
-        decodeV3.setOnClickListener(new decodeV3Click(path));
+        decodeV3.setOnClickListener(new decodeV3Click(path1));
 
+        Button decodeRecodeV1 = findViewById(R.id.decodeRecodeV1);
+        decodeRecodeV1.setOnClickListener(new decodeRecodeV1Click(path1, mainPath + "/recodedaudio"));
+    }
 
+    private class decodeRecodeV1Click implements View.OnClickListener
+    {
+        private String path1;
+        private String path2;
+
+        public decodeRecodeV1Click(
+                String path1, String path2)
+        {
+
+            this.path1 = path1;
+            this.path2 = path2;
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            ByteArrayTransferClassV2 buff = new ByteArrayTransferClassV2(64);
+
+            SetupGetFromFileToBuff decoder = new SetupGetFromFileToBuff(path1, buff);
+            try
+            {
+                decoder.configure();
+
+                SetupGetFromBuffToFile encoder = new SetupGetFromBuffToFile(path2, buff);
+
+                decoder.start();
+
+                MediaFormat outputFormat = MediaFormat.createAudioFormat("audio/mp4a-latm", 22050, 1);
+                Log.w(TAG, "mediaFormatnew = " + outputFormat.toString());
+
+                encoder.configure(MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4, outputFormat);
+
+                encoder.start();
+
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -111,7 +162,7 @@ public class MainActivity extends AppCompatActivity
         {
             ByteArrayTransferClassV2 buff = new ByteArrayTransferClassV2(64);
 
-            com.example.MediaExtractorSyncronusOnThread.Setup decoder = new com.example.MediaExtractorSyncronusOnThread.Setup(path, buff);
+            SetupGetFromFileToBuff decoder = new SetupGetFromFileToBuff(path, buff);
             try
             {
                 decoder.configure();
@@ -196,10 +247,10 @@ public class MainActivity extends AppCompatActivity
         {
             ByteArrayTransferClassV2 buff = new ByteArrayTransferClassV2(512);
 
-            com.example.MediaExtractorSyncronusOnThread.Setup setup = new com.example.MediaExtractorSyncronusOnThread.Setup(path, buff);
+            SetupGetFromFileToBuff setupGetFromFileToBuff = new SetupGetFromFileToBuff(path, buff);
             try
             {
-                setup.configure();
+                setupGetFromFileToBuff.configure();
             }
             catch (IOException e)
             {
@@ -213,7 +264,7 @@ public class MainActivity extends AppCompatActivity
             try
             {
                 tP.start();
-                setup.start();
+                setupGetFromFileToBuff.start();
             }
             catch (InterruptedException e)
             {

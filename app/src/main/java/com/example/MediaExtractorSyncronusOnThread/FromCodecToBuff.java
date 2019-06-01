@@ -13,11 +13,12 @@ public class FromCodecToBuff implements Runnable
     private final String TAG = getClass().getSimpleName();
     private MediaCodec decoder;
     private ByteArrayTransferClassV2 buff;
+    private MediaFormat outputFormat;
+    private boolean outputFormatReady = false;
 
     FromCodecToBuff(MediaCodec decoder, ByteArrayTransferClassV2 buff)
     {
         this.decoder = decoder;
-
         this.buff = buff;
     }
 
@@ -31,10 +32,13 @@ public class FromCodecToBuff implements Runnable
 
             int outputBufferId = decoder.dequeueOutputBuffer(info, 3000);
 
+            Log.d(TAG, "1 ok");
+
             if (outputBufferId >= 0)
             {
                 ByteBuffer outputBuffer = decoder.getOutputBuffer(outputBufferId);
-                MediaFormat bufferFormat = decoder.getOutputFormat(outputBufferId); // option A
+
+                Log.d(TAG, "2 ok");
 
                 //Log.v(TAG, "-------------------------------- option A");
 
@@ -42,6 +46,8 @@ public class FromCodecToBuff implements Runnable
                 {
                     //Log.e(TAG, "outputBuffer.hasArray() = " + outputBuffer.hasArray());
                     //Log.d(TAG, "outputBuffer.remaining() = " + outputBuffer.remaining());
+
+                    Log.d(TAG, "3 ok");
 
                     byte[] b = new byte[outputBuffer.remaining()];
                     outputBuffer.get(b);
@@ -52,6 +58,8 @@ public class FromCodecToBuff implements Runnable
                     buff.enqueue(b);
                     //Log.w(TAG, "dati caricati");
 
+                    Log.d(TAG, "4 ok");
+
                 }
                 else
                 {
@@ -61,6 +69,8 @@ public class FromCodecToBuff implements Runnable
                 // bufferFormat is identical to outputFormat
                 // outputBuffer is ready to be processed or rendered.
                 decoder.releaseOutputBuffer(outputBufferId, 0);
+
+                Log.d(TAG, "5 ok");
             }
             else if (outputBufferId == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED)
             {
@@ -68,19 +78,31 @@ public class FromCodecToBuff implements Runnable
                 //Log.v(TAG, "-------------------------------- option B");
                 // Subsequent data will conform to new format.
                 // Can ignore if using getOutputFormat(outputBufferId)
-                MediaFormat outputFormat = decoder.getOutputFormat(); // option B
+                outputFormat = decoder.getOutputFormat(); // option B
+                outputFormatReady = true;
+
 
                 Log.v(TAG, "new outputFormat: " + outputFormat.toString());
             }
             else
             {
-                // Log.v(TAG, "-------------------------------- ne A ne B \n outputBufferId: " + (
-                //      outputBufferId == MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
+                Log.v(TAG, "-------------------------------- ne A ne B \n outputBufferId: " + (
+                        outputBufferId == MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
             }
 
         }
         while (info.flags != MediaCodec.BUFFER_FLAG_END_OF_STREAM);
 
         buff.setWorkDone(true);
+    }
+
+    public MediaFormat getOutputFormat()
+    {
+        return outputFormat;
+    }
+
+    public boolean isOutputFormatReady()
+    {
+        return outputFormatReady;
     }
 }

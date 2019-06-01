@@ -37,7 +37,6 @@ public class FromFileToCodec implements Runnable
         boolean flag = true;
         while (flag)
         {
-            long presentationTimeUs = 0;
 
             // pijo l'indice
             int inIndex = decoder.dequeueInputBuffer(1000);
@@ -59,8 +58,6 @@ public class FromFileToCodec implements Runnable
                     {
                         Log.v(TAG, "presentationTimeUs: " + extractor.getSampleTime());
                         Log.d(TAG, "InputBuffer BUFFER_FLAG_END_OF_STREAM");
-
-                        presentationTimeUs = extractor.getSampleTime();
 
                         decoder.queueInputBuffer(inIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
 
