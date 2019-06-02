@@ -28,9 +28,13 @@ public class SetupGetFromBuffToFile
 
     public void configure(int format, MediaFormat outputFormat) throws IOException
     {
-        decoder = MediaCodec.createDecoderByType(outputFormat.getString(MediaFormat.KEY_MIME));
+        decoder = MediaCodec.createDecoderByType("audio/mp4a-latm");
 
-        decoder.configure(outputFormat, null, null, 0);
+        Log.d(TAG, "decoder = " + decoder.toString());
+
+        decoder.configure(outputFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
+
+        Log.d(TAG, "decoder.configure ok");
 
         Log.v(TAG, "setDecoder called: " + outputFormat.toString());
 

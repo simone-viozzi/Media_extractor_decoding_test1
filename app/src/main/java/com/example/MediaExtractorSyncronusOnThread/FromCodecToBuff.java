@@ -32,13 +32,13 @@ public class FromCodecToBuff implements Runnable
 
             int outputBufferId = decoder.dequeueOutputBuffer(info, 3000);
 
-            Log.d(TAG, "1 ok");
+            //Log.d(TAG, "1 ok");
 
             if (outputBufferId >= 0)
             {
                 ByteBuffer outputBuffer = decoder.getOutputBuffer(outputBufferId);
 
-                Log.d(TAG, "2 ok");
+                //Log.d(TAG, "2 ok");
 
                 //Log.v(TAG, "-------------------------------- option A");
 
@@ -47,7 +47,7 @@ public class FromCodecToBuff implements Runnable
                     //Log.e(TAG, "outputBuffer.hasArray() = " + outputBuffer.hasArray());
                     //Log.d(TAG, "outputBuffer.remaining() = " + outputBuffer.remaining());
 
-                    Log.d(TAG, "3 ok");
+                    //Log.d(TAG, "3 ok");
 
                     byte[] b = new byte[outputBuffer.remaining()];
                     outputBuffer.get(b);
@@ -58,7 +58,7 @@ public class FromCodecToBuff implements Runnable
                     buff.enqueue(b);
                     //Log.w(TAG, "dati caricati");
 
-                    Log.d(TAG, "4 ok");
+                    //Log.d(TAG, "4 ok");
 
                 }
                 else
@@ -70,7 +70,7 @@ public class FromCodecToBuff implements Runnable
                 // outputBuffer is ready to be processed or rendered.
                 decoder.releaseOutputBuffer(outputBufferId, 0);
 
-                Log.d(TAG, "5 ok");
+                //Log.d(TAG, "5 ok");
             }
             else if (outputBufferId == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED)
             {
@@ -86,8 +86,8 @@ public class FromCodecToBuff implements Runnable
             }
             else
             {
-                Log.v(TAG, "-------------------------------- ne A ne B \n outputBufferId: " + (
-                        outputBufferId == MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
+                //Log.v(TAG, "-------------------------------- ne A ne B \n outputBufferId: " + (
+                //        outputBufferId == MediaCodec.INFO_TRY_AGAIN_LATER ? "INFO_TRY_AGAIN_LATER" : outputBufferId));
             }
 
         }

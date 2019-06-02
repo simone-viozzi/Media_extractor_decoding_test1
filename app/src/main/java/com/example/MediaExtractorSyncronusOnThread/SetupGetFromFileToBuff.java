@@ -35,10 +35,10 @@ public class SetupGetFromFileToBuff
 
 
         extractor.setDataSource(path);
-        Log.v(TAG, "setted path");
+        //Log.v(TAG, "setted path");
 
         int numTracks = extractor.getTrackCount();
-        Log.v(TAG, "numTracks: " + numTracks);
+        //Log.v(TAG, "numTracks: " + numTracks);
 
         MediaFormat format = extractor.getTrackFormat(0);
         String mAudioKeyMine = format.getString(MediaFormat.KEY_MIME);
@@ -49,7 +49,7 @@ public class SetupGetFromFileToBuff
         decoder = MediaCodec.createDecoderByType(mAudioKeyMine);
         decoder.configure(format, null, null, 0);
 
-        Log.v(TAG, "setDecoder called: " + format.toString());
+        //Log.v(TAG, "setDecoder called: " + format.toString());
 
 
         fromFileToCodec = new FromFileToCodec(decoder, extractor);

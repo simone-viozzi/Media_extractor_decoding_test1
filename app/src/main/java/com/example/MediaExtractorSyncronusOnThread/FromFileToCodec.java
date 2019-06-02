@@ -3,7 +3,6 @@ package com.example.MediaExtractorSyncronusOnThread;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 
@@ -25,7 +24,7 @@ public class FromFileToCodec implements Runnable
     {
         MediaFormat outputFormat = decoder.getOutputFormat();
         sampleRate = outputFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
-        Log.v(TAG, "outputFormat: " + outputFormat.toString());
+        //Log.v(TAG, "outputFormat: " + outputFormat.toString());
     }
 
     @Override
@@ -56,8 +55,8 @@ public class FromFileToCodec implements Runnable
                     // se sampleSize < 0 ho raggiunto la fine del file
                     if (sampleSize < 0)
                     {
-                        Log.v(TAG, "presentationTimeUs: " + extractor.getSampleTime());
-                        Log.d(TAG, "InputBuffer BUFFER_FLAG_END_OF_STREAM");
+                        //Log.v(TAG, "presentationTimeUs: " + extractor.getSampleTime());
+                        //Log.d(TAG, "InputBuffer BUFFER_FLAG_END_OF_STREAM");
 
                         decoder.queueInputBuffer(inIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
 

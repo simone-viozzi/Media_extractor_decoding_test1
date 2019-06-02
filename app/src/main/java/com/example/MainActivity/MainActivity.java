@@ -2,6 +2,7 @@ package com.example.MainActivity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.media.MediaCodecInfo;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
@@ -120,21 +121,24 @@ public class MainActivity extends AppCompatActivity
             ByteArrayTransferClassV2 buff = new ByteArrayTransferClassV2(64);
 
             SetupGetFromFileToBuff decoder = new SetupGetFromFileToBuff(path1, buff);
+            SetupGetFromBuffToFile encoder = new SetupGetFromBuffToFile(path2, buff);
+
+
+            MediaFormat outputFormat = MediaFormat.createAudioFormat("audio/mp4a-latm", 22050, 1);
+            outputFormat.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
+            outputFormat.setInteger(MediaFormat.KEY_BIT_RATE, 16000);
+            outputFormat.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 0);
+
+            Log.w(TAG, "mediaFormatnew = " + outputFormat.toString());
+
             try
             {
                 decoder.configure();
 
-                SetupGetFromBuffToFile encoder = new SetupGetFromBuffToFile(path2, buff);
-
-                decoder.start();
-
-                MediaFormat outputFormat = MediaFormat.createAudioFormat("audio/mp4a-latm", 22050, 1);
-                Log.w(TAG, "mediaFormatnew = " + outputFormat.toString());
-
                 encoder.configure(MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4, outputFormat);
 
+                decoder.start();
                 encoder.start();
-
             }
             catch (InterruptedException e)
             {

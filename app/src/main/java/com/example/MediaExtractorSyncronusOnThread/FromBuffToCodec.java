@@ -1,7 +1,6 @@
 package com.example.MediaExtractorSyncronusOnThread;
 
 import android.media.MediaCodec;
-import android.util.Log;
 
 import com.example.DataClasses.ByteArrayTransferClassV2;
 
@@ -34,7 +33,7 @@ public class FromBuffToCodec implements Runnable
             // pijo l'indice
             inIndex = decoder.dequeueInputBuffer(1000);
 
-            Log.d(TAG, "1 ok");
+            //Log.d(TAG, "1 ok");
 
             if (inIndex >= 0)
             {
@@ -55,7 +54,7 @@ public class FromBuffToCodec implements Runnable
 
                         //Log.d(TAG, "3 ok");
 
-                        int presentationTimeUs = 44100 * 16 * 1 * 10 ^ (-6) * (b.length * cont++);
+                        long presentationTimeUs = 1000000L * ((1024 * cont) / 2) / 22050;
 
                         decoder.queueInputBuffer(inIndex, 0, b.length, presentationTimeUs, 0);
 
